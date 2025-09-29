@@ -8,7 +8,7 @@
  * @author Liam Addie
  */
 
-#include<interrupts.hpp>
+#include <interrupts.hpp>
 
 int main(int argc, char** argv) {
 
@@ -22,8 +22,7 @@ int main(int argc, char** argv) {
     std::string execution;  //!< string to accumulate the execution output
 
     /******************ADD YOUR VARIABLES HERE*************************/
-
-
+    int curr_time = 0; // current time in the simulation
 
     /******************************************************************/
 
@@ -32,8 +31,10 @@ int main(int argc, char** argv) {
         auto [activity, duration_intr] = parse_trace(trace);
 
         /******************ADD YOUR SIMULATION CODE HERE*************************/
-
-
+        if(activity == "CPU"){
+            // CPU activity - string format: <time>, <duration>, CPU activity
+            execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU activity\n";
+        }
 
         /************************************************************************/
 
