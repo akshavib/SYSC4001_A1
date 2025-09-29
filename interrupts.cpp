@@ -35,6 +35,9 @@ int main(int argc, char** argv) {
             // CPU activity - string format: <time>, <duration>, CPU activity
             execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU activity\n";
         }
+        else if (activity == "SYSCALL"){
+            
+        }
 
         /************************************************************************/
 
