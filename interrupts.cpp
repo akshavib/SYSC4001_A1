@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
             execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU activity\n";
         
         } else if (activity == "SYSCALL"){
+            execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU activity\n";
             
         } else if(activity == "END_IO") {
 
