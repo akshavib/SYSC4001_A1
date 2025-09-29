@@ -3,7 +3,7 @@
  * @file interrupts.cpp
  * @author Sasisekhar Govind
  *
- * @author Akshavi Baskaran 101302106
+ * @author Akshavi Baskaran
  * 
  * @author Liam Addie
  */
@@ -34,10 +34,8 @@ int main(int argc, char** argv) {
         if(activity == "CPU"){
             // CPU activity - string format: <time>, <duration>, CPU activity
             execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU activity\n";
-            curr_time += duration_intr;
-        }
-        else if (activity == "SYSCALL"){
-            // SYSCALL activity - string format: <time>, <duration>, SYSCALL
+        } else if(activity == "END_IO") {
+
         }
 
         /************************************************************************/
