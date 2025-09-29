@@ -37,6 +37,9 @@ int main(int argc, char** argv) {
         } else if(activity == "END_IO") {
 
         }
+        else if (activity == "SYSCALL"){
+            
+        }
 
         /************************************************************************/
 
