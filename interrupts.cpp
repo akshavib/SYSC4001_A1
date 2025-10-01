@@ -35,6 +35,7 @@ int main(int argc, char** argv) {
         if(activity == "CPU"){
             // CPU activity - string format: <time>, <duration>, CPU activity
             execution += std::to_string(curr_time) + ", " + std::to_string(duration_intr) + ", CPU burst\n";
+            curr_time += duration_intr;
         
         } else if (activity == "SYSCALL"){
             // boilerplate for syscall interrupt
@@ -53,6 +54,14 @@ int main(int argc, char** argv) {
 
 
         } else if(activity == "END_IO") {
+            // log end of I/O
+            int wait = delays[duration_intr];
+            execution += std::to_string(curr_time) + ", " + std::to_string(wait) +", end of I/0 for device " + std::to_string(duration_intr) + "\n";
+            curr_time += wait;
+
+        } else {
+            // unknown activity
+            execution += std::to_string(curr_time) + ", " + std::to_string(1) + ", UNKNOWN activity\n";
         }
         
 
