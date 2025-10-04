@@ -76,10 +76,31 @@ int main(int argc, char** argv) {
 
 
         } else if(activity == "END_IO") {
-            // log end of I/O
-            int wait = delays[duration_intr];
-            execution += std::to_string(curr_time) + ", " + std::to_string(wait) +", end of I/0 for device " + std::to_string(duration_intr) + ", store information in memory.\n";
-            curr_time += wait;
+            // boilerplate for endio
+            auto[logging, upd_time] = intr_boilerplate(curr_time, duration_intr, cntxt_time, vectors);
+
+            execution += logging;
+            curr_time = upd_time;
+
+            // ISR body (wait time for that device)
+            int total_isr = delays[duration_intr];
+
+            if(total_isr <= isr_activity){
+                execution += std::to_string(curr_time) + ", " + std::to_string(total_isr) + ", ENDIO: run the ISR (device driver)\n";
+                curr_time += total_isr;
+            } else{
+                execution += std::to_string(curr_time) + ", " + std::to_string(isr_activity) + ", ENDIO: run the ISR (device driver)\n";
+                curr_time += isr_activity;
+
+                int diff = total_isr - isr_activity;
+                execution += std::to_string(curr_time) + ", " + std::to_string(diff) + ", check device status\n";
+
+                curr_time += diff;
+            }
+
+            // conclude interrupt, return to user mode
+            execution += std::to_string(curr_time) + ", " + std::to_string(1) + ", return from interrupt (IRET)\n";
+            curr_time += 1;
 
         } else {
             // unknown activity
