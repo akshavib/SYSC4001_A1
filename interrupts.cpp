@@ -24,6 +24,7 @@ int main(int argc, char** argv) {
     /******************ADD YOUR VARIABLES HERE*************************/
     int curr_time = 0; // current time in the simulation
     int cntxt_time = 10; // default 10ms for saving context
+    int isr_activity = 40; // default 40ms for interrupt activity
 
     /******************************************************************/
 
@@ -39,24 +40,45 @@ int main(int argc, char** argv) {
         
         } else if (activity == "SYSCALL"){
             // boilerplate for syscall interrupt
+            // boilerplate wants the current tume, corrolated interrupt time, context save time, vector table
             auto [logging, upd_time] = intr_boilerplate(curr_time, duration_intr, cntxt_time, vectors);
-            curr_time = upd_time;
             execution += logging;
+            curr_time = upd_time;
 
             // ISR body (wait time for that device)
-            int wait = delays[duration_intr];
-            curr_time += wait;
-            execution += std::to_string(curr_time) + ", " + std::to_string(wait) + ", ISR for device " + std::to_string(duration_intr) + "\n";
+            int total_isr = delays[duration_intr];
 
-            // return from interrupt boilerplate
-            curr_time++;
-            execution += std::to_string(curr_time) + ", " + std::to_string(1) + ", return from interrupt\n";
+            if (total_isr <= isr_activity){
+                execution += std::to_string(curr_time) + ", " + std::to_string(total_isr) + ", SYSCALL: run ISR for device " + std::to_string(duration_intr) + "\n";
+                curr_time += total_isr;
+            } else if (total_isr <= 2 * isr_activity){
+                execution += std::to_string(curr_time) + ", " + std::to_string(isr_activity) + ", SYSCALL: run ISR for device " + std::to_string(duration_intr) + "\n";
+                curr_time += isr_activity;
+
+                int remaining = total_isr - isr_activity;
+                execution += std::to_string(curr_time) + ", " + std::to_string(remaining) + ", transfer device data to memory\n";
+                curr_time += remaining;
+            } else {
+                execution += std::to_string(curr_time) + ", " + std::to_string(isr_activity) + ", SYSCALL: run ISR for device " + std::to_string(duration_intr) + "\n";
+                curr_time += isr_activity;
+
+                execution += std::to_string(curr_time) + ", " + std::to_string(isr_activity) + ", transfer device data to memory\n";
+                curr_time += isr_activity;
+
+                int remaining = total_isr - 2 * isr_activity;
+                execution += std::to_string(curr_time) + ", " + std::to_string(remaining) + ", SYSCALL: finalize ISR for device, check errors\n";
+                curr_time += remaining;
+            }
+
+            // conclude interrupt, return to user mode
+            execution += std::to_string(curr_time) + ", " + std::to_string(1) + ", return from interrupt (IRET)\n";
+            curr_time += 1;
 
 
         } else if(activity == "END_IO") {
             // log end of I/O
             int wait = delays[duration_intr];
-            execution += std::to_string(curr_time) + ", " + std::to_string(wait) +", end of I/0 for device " + std::to_string(duration_intr) + "\n";
+            execution += std::to_string(curr_time) + ", " + std::to_string(wait) +", end of I/0 for device " + std::to_string(duration_intr) + ", store information in memory.\n";
             curr_time += wait;
 
         } else {
