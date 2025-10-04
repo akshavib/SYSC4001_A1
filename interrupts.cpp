@@ -105,6 +105,7 @@ int main(int argc, char** argv) {
         } else {
             // unknown activity
             execution += std::to_string(curr_time) + ", " + std::to_string(1) + ", UNKNOWN activity\n";
+            curr_time += 1;
         }
         
 
