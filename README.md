@@ -10,19 +10,3 @@ This project simulates interrupt handling in a simplified CPU environment. It mo
 
 - Retrieved Code Author: Sasisekhar Govind
 ---
-
-## 📁 Project Structure
-
-
----
-
-## ⚙️ How to Build and Run
-
-### Compile the Program
-
-```bash
-g++ interrupts.cpp -o interrupts
-
-./interrupts <trace_file.txt> <vector_table.txt> <device_table.txt>
-
-./interrupts trace.txt vector_table.txt device_table.txt
